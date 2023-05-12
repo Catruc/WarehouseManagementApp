@@ -50,6 +50,17 @@ public class ConnectionFactory {
         }
     }
 
+    public static void close(Statement statement) {
+        if (statement != null) {
+            try {
+                statement.close();
+            } catch (SQLException e) {
+                LOGGER.log(Level.WARNING, "An error occured while trying to close the statement");
+            }
+        }
+    }
+
+
     public static void close(ResultSet resultSet) {
         if (resultSet != null) {
             try {
@@ -66,7 +77,7 @@ public class ConnectionFactory {
             Class.forName(DRIVER);
             Connection connection = DriverManager.getConnection(DBURL, USER, PASS);
             Statement stn= connection.createStatement();
-            ResultSet r= stn.executeQuery("SELECT * FROM Test");
+            ResultSet r= stn.executeQuery("SELECT * FROM Clients");
             while(r.next())
             {
                 String columnt1= r.getString("id");

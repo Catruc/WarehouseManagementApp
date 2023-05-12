@@ -1,18 +1,16 @@
 package Model;
 
 public class Client {
-    private int id;
+    private int clientID;
     private String name;
     private String surname;
+    private int phoneNumber;
 
-    public Client(int id, String name, String surname) {
-        this.id = id;
+    public Client() {
+        this.clientID = clientID;
         this.name = name;
         this.surname = surname;
-    }
-
-    public int getId() {
-        return id;
+        this.phoneNumber = phoneNumber;
     }
 
     public String getName() {
@@ -23,8 +21,16 @@ public class Client {
         return surname;
     }
 
+    public int getClientID() {
+        return clientID;
+    }
+
+    public int getPhoneNumber() {
+        return phoneNumber;
+    }
+
     public void setId(int id) {
-        this.id = id;
+        this.clientID = id;
     }
 
     public void setName(String name) {
@@ -35,12 +41,17 @@ public class Client {
         this.surname = surname;
     }
 
+    public void setPhoneNumber(int phoneNumber) {
+        this.phoneNumber = phoneNumber;
+    }
+
     @Override
     public String toString() {
         return "Client{" +
-                "id=" + id +
+                "clientID=" + clientID +
                 ", name='" + name + '\'' +
                 ", surname='" + surname + '\'' +
+                ", phoneNumber=" + phoneNumber +
                 '}';
     }
 }
