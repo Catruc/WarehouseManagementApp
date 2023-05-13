@@ -21,9 +21,11 @@ public class View {
     private JLabel clientIDLabel;
     private JLabel clientNameLabel;
     private JLabel clientSurnameLabel;
+    private JLabel clientPhoneNumberLabel;
     private JTextField clientIDTextField;
     private JTextField clientNameTextField;
     private JTextField clientSurnameTextField;
+    private JTextField clientPhoneNumberTextField;
     private JButton clientInsertButton;
     private JButton deleteClientButton;
     private JButton updateClientButton;
@@ -151,6 +153,11 @@ public class View {
         clientSurnameLabel.setFont(new Font("Arial", Font.BOLD, 30));
         clientFrame.add(clientSurnameLabel);
 
+        clientPhoneNumberLabel = new JLabel("Phone Number:");
+        clientPhoneNumberLabel.setBounds(70, 360, 250, 50);
+        clientPhoneNumberLabel.setFont(new Font("Arial", Font.BOLD, 30));
+        clientFrame.add(clientPhoneNumberLabel);
+
         clientIDTextField = new JTextField();
         clientIDTextField.setBounds(250, 60, 100, 50);
         clientIDTextField.setFont(new Font("Arial", Font.BOLD, 30));
@@ -165,6 +172,11 @@ public class View {
         clientSurnameTextField.setBounds(250, 260, 600, 50);
         clientSurnameTextField.setFont(new Font("Arial", Font.BOLD, 30));
         clientFrame.add(clientSurnameTextField);
+
+        clientPhoneNumberTextField = new JTextField();
+        clientPhoneNumberTextField.setBounds(350, 360, 500, 50);
+        clientPhoneNumberTextField.setFont(new Font("Arial", Font.BOLD, 30));
+        clientFrame.add(clientPhoneNumberTextField);
 
         clientInsertButton = new JButton("INSERT");
         clientInsertButton.setBounds(1000, 30, 400, 100);
@@ -198,7 +210,7 @@ public class View {
 
         clientTable = new JTable();
         JScrollPane tableScrollPane = new JScrollPane(clientTable);
-        tableScrollPane.setBounds(50, 400, 800, 300);
+        tableScrollPane.setBounds(50, 460, 800, 300);
         clientFrame.add(tableScrollPane);
         String[] columnNames = {"ID", "Name", "Surname"};
         DefaultTableModel tableModel = new DefaultTableModel(columnNames, 0);
@@ -586,5 +598,13 @@ public class View {
 
     public JButton getBackToWelcomeButtonFromProduct() {
         return backToWelcomeButtonFromProduct;
+    }
+
+    public JLabel getClientPhoneNumberLabel() {
+        return clientPhoneNumberLabel;
+    }
+
+    public JTextField getClientPhoneNumberTextField() {
+        return clientPhoneNumberTextField;
     }
 }

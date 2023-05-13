@@ -1,4 +1,6 @@
 package DataAccess;
 
-public class ProductDAO {
+import Model.Product;
+
+public class ProductDAO extends GeneralDAO<Product>{
 }
