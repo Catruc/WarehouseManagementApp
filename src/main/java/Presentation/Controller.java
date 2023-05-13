@@ -1,9 +1,10 @@
 package Presentation;
 
 import BusinessLogic.ClientBLL;
+import BusinessLogic.OrderBLL;
 import BusinessLogic.ProductBLL;
-import DataAccess.ClientDAO;
 import Model.Client;
+import Model.Orders;
 import Model.Product;
 
 import javax.swing.*;
@@ -16,11 +17,13 @@ public class Controller {
     private View view;
     private ClientBLL clientBLL;
     private ProductBLL productBLL;
+    private OrderBLL orderBLL;
 
-    public Controller(View view, ClientBLL clientBLL, ProductBLL productBLL) {
+    public Controller(View view, ClientBLL clientBLL, ProductBLL productBLL, OrderBLL orderBLL) {
         this.view = view;
         this.clientBLL = new ClientBLL();
         this.productBLL = new ProductBLL();
+        this.orderBLL = new OrderBLL();
         initListeners();
     }
 
@@ -53,13 +56,32 @@ public class Controller {
         for (int i = 0; i < products.size(); i++) {
             data[i][0] = products.get(i).getId();
             data[i][1] = products.get(i).getName();
-            data[i][2] = products.get(i).getQuantity();
+            data[i][2] = products.get(i).getStock();
             data[i][3] = products.get(i).getPrice();
         }
 
         // Create a new table model and set it for the table
         DefaultTableModel model = new DefaultTableModel(data, columnNames);
         view.getProductTable().setModel(model);
+    }
+
+
+    public void updateOrderTable() {
+        List<Orders> orders = orderBLL.findAllOrders(); // Fetch the data from the database
+        String[] columnNames = {"Id", "ClientID", "ProductID", "Quantity"}; // Specify column names
+
+        // Prepare the data for the table
+        Object[][] data = new Object[orders.size()][4];
+        for (int i = 0; i < orders.size(); i++) {
+            data[i][0] = orders.get(i).getId();
+            data[i][1] = orders.get(i).getClientID();
+            data[i][2] = orders.get(i).getProductID();
+            data[i][3] = orders.get(i).getQuantity();
+        }
+
+        // Create a new table model and set it for the table
+        DefaultTableModel model = new DefaultTableModel(data, columnNames);
+        view.getOrderTable().setModel(model);
     }
 
 
@@ -79,6 +101,8 @@ public class Controller {
         view.getProductInsertButton().addActionListener(new ProductInsertButtonListener());
         view.getDeleteProductButton().addActionListener(new DeleteProductButtonListener());
         view.getUpdateProductButton().addActionListener(new UpdateProductButtonListener());
+        view.getOrderInsertButton().addActionListener(new OrderInsertButtonListener());
+        view.getDeleteOrderButton().addActionListener(new DeleteOrderButtonListener());
     }
 
     class ClientButtonListener implements ActionListener {
@@ -103,6 +127,7 @@ public class Controller {
         public void actionPerformed(ActionEvent e) {
             view.getWelcomeFrame().setVisible(false);
             view.getOrderFrame().setVisible(true);
+            updateOrderTable();
         }
     }
 
@@ -272,7 +297,7 @@ public class Controller {
                 if (!quantityText.isEmpty()) {
                     int quantity = Integer.parseInt(quantityText);
                     if (quantity >= 0) {
-                        existingProduct.setQuantity(quantity);
+                        existingProduct.setStock(quantity);
                     } else {
                         JOptionPane.showMessageDialog(null, "The quantity must be a non-negative integer!", "Error", JOptionPane.ERROR_MESSAGE);
                         System.out.println("The quantity must be a non-negative integer!");
@@ -302,6 +327,59 @@ public class Controller {
             }
         }
     }
+
+
+    class OrderInsertButtonListener implements ActionListener {
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            try {
+                if (view.getOrderIDTextField().getText().equals("") || view.getOrderClientIDTextField().getText().equals("") || view.getOrderProductIDTextField().getText().equals("") || view.getOrderQuantityTextField().getText().equals("")) {
+                    JOptionPane.showMessageDialog(null, "Please fill all the fields!", "Error", JOptionPane.ERROR_MESSAGE);
+                }
+                int id = Integer.parseInt(view.getOrderIDTextField().getText());
+                int clientID = Integer.parseInt(view.getOrderClientIDTextField().getText());
+                int productID = Integer.parseInt(view.getOrderProductIDTextField().getText());
+                int quantity = Integer.parseInt(view.getOrderQuantityTextField().getText());
+
+                Product product = productBLL.findDeletion(productID);
+
+                Orders orders = new Orders(id, clientID, productID, quantity);
+                orderBLL.insertOrder(orders);
+
+                product.setStock(product.getStock() - quantity);
+                productBLL.updateProduct(product);
+
+                System.out.println("am ajuns aici");
+                updateOrderTable();
+
+            } catch (NumberFormatException ex) {
+                System.out.println("The id must be an integer!");
+            } catch (IllegalArgumentException ex) {
+                System.out.println(ex.getMessage());
+            }
+        }
+    }
+
+
+    class DeleteOrderButtonListener implements ActionListener {
+
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            try {
+                int id = Integer.parseInt(view.getOrderIDTextField().getText());
+                orderBLL.deleteOrder(id);
+
+                updateOrderTable();
+
+            } catch (NumberFormatException ex) {
+                System.out.println("The id must be an integer!");
+            } catch (IllegalArgumentException ex) {
+                System.out.println(ex.getMessage());
+            }
+        }
+    }
+
+
 
 
 }

@@ -1,13 +1,12 @@
 package BusinessLogic.validatorsForProducts;
 
-import Model.Client;
 import Model.Product;
 
 import javax.swing.*;
 
 public class ProductQuantityValidator implements Validator<Product>{
     public void validate(Product p) {
-        int quantity = p.getQuantity();
+        int quantity = p.getStock();
         String quantityString = Integer.toString(quantity);
         if(!quantityString.matches("[0-9]+"))
         {

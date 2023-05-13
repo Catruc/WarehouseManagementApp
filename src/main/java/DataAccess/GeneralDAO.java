@@ -18,11 +18,12 @@ public abstract class GeneralDAO <T> {
 
 
     private final Class<T> type;
+    private final String idFieldName;  // The name of the id field
 
     @SuppressWarnings("unchecked")
-    public GeneralDAO() {
+    public GeneralDAO(String idFieldName) {
         this.type = (Class<T>) ((ParameterizedType) getClass().getGenericSuperclass()).getActualTypeArguments()[0];
-
+        this.idFieldName = idFieldName;
     }
 
     private String createSelectQuery(String field) {
@@ -79,7 +80,7 @@ public abstract class GeneralDAO <T> {
 
         Field[] fields = type.getDeclaredFields();
         for (int i = 0; i < fields.length; i++) {
-            if (!fields[i].getName().equals("id")) {
+            if (!fields[i].getName().equals(idFieldName)) {
                 sb.append(fields[i].getName());
                 sb.append(" = ?");
                 if (i < fields.length - 1) {
@@ -88,7 +89,7 @@ public abstract class GeneralDAO <T> {
             }
         }
 
-        sb.append(" WHERE id = ?");
+        sb.append(" WHERE " + idFieldName + " = ?");
 
         return sb.toString();
     }
@@ -98,7 +99,7 @@ public abstract class GeneralDAO <T> {
         StringBuilder sb = new StringBuilder();
         sb.append("DELETE FROM ");
         sb.append(type.getSimpleName());
-        sb.append(" WHERE id = ?");
+        sb.append(" WHERE " + idFieldName + "= ?");
         return sb.toString();
     }
 
@@ -131,7 +132,7 @@ public abstract class GeneralDAO <T> {
             generatedKeys = statement.getGeneratedKeys();
             if (generatedKeys.next()) {
                 int idField = generatedKeys.getInt(1);
-                Field field = object.getClass().getDeclaredField("id");
+                Field field = object.getClass().getDeclaredField(idFieldName);
                 field.setAccessible(true);
                 field.set(object, idField);
             } else {
@@ -161,7 +162,7 @@ public abstract class GeneralDAO <T> {
 
             int i = 1;
             for (Field field : object.getClass().getDeclaredFields()) {
-                if (!field.getName().equals("id")) {
+                if (!field.getName().equals(idFieldName)) {
                     field.setAccessible(true);
                     Object value = field.get(object);
                     statement.setObject(i, value);
@@ -169,7 +170,7 @@ public abstract class GeneralDAO <T> {
                 }
             }
 
-            Field idField = object.getClass().getDeclaredField("id");
+            Field idField = object.getClass().getDeclaredField(idFieldName);
             idField.setAccessible(true);
             statement.setObject(i, idField.get(object));
 
@@ -255,7 +256,7 @@ public abstract class GeneralDAO <T> {
         Connection connection = null;
         PreparedStatement statement = null;
         ResultSet resultSet = null;
-        String query = createSelectQuery("id");
+        String query = createSelectQuery(idFieldName);
 
         try {
             connection = ConnectionFactory.getConnection();
@@ -264,7 +265,7 @@ public abstract class GeneralDAO <T> {
             resultSet = statement.executeQuery();
 
             if (resultSet.next()) {
-                return resultSet.getInt("id"); // Retrieve the ID from the result set
+                return resultSet.getInt(idFieldName); // Retrieve the ID from the result set
             }
         } catch (SQLException e) {
             LOGGER.log(Level.WARNING, type.getName() + "DAO:findById " + e.getMessage());
@@ -282,7 +283,7 @@ public abstract class GeneralDAO <T> {
         Connection connection = null;
         PreparedStatement statement = null;
         ResultSet resultSet = null;
-        String query = createSelectQuery("id");
+        String query = createSelectQuery(idFieldName);
 
         T object = null;
         try {

@@ -10,7 +10,7 @@ import java.util.logging.Logger;
 public class ClientDAO extends GeneralDAO<Client> {
 
     public ClientDAO() {
-        super();
+        super("clientId");
     }
 
 }
