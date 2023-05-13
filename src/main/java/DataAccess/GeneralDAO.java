@@ -102,74 +102,6 @@ public abstract class GeneralDAO <T> {
         return sb.toString();
     }
 
-
-    public T findById(int id) {
-        Connection connection = null;
-        PreparedStatement statement = null;
-        ResultSet resultSet = null;
-        String query = createSelectQuery("id");
-
-        try {
-            connection = ConnectionFactory.getConnection();
-            statement = connection.prepareStatement(query);
-            statement.setInt(1, id);
-            resultSet = statement.executeQuery();
-
-            return createObjects(resultSet).get(0);
-        } catch (SQLException e) {
-            LOGGER.log(Level.WARNING, type.getName() + "DAO:findById " + e.getMessage());
-        } finally {
-            ConnectionFactory.close(resultSet);
-            ConnectionFactory.close(statement);
-            ConnectionFactory.close(connection);
-        }
-        return null;
-
-    }
-
-
-    private List<T> createObjects(ResultSet resultSet) {
-        List<T> list = new ArrayList<T>();
-        Constructor[] ctors = type.getDeclaredConstructors();
-        Constructor ctor = null;
-        for (int i = 0; i < ctors.length; i++) {
-            ctor = ctors[i];
-            if (ctor.getGenericParameterTypes().length == 0)
-                break;
-        }
-        try {
-            while (resultSet.next()) {
-                ctor.setAccessible(true);
-                T instance = (T) ctor.newInstance();
-                for (Field field : type.getDeclaredFields()) {
-                    String fieldName = field.getName();
-                    Object value = resultSet.getObject(fieldName);
-                    PropertyDescriptor propertyDescriptor = new PropertyDescriptor(fieldName, type);
-                    Method method = propertyDescriptor.getWriteMethod();
-                    method.invoke(instance, value);
-                }
-                list.add(instance);
-            }
-        } catch (InstantiationException e) {
-            e.printStackTrace();
-        } catch (IllegalAccessException e) {
-            e.printStackTrace();
-        } catch (SecurityException e) {
-            e.printStackTrace();
-        } catch (IllegalArgumentException e) {
-            e.printStackTrace();
-        } catch (InvocationTargetException e) {
-            e.printStackTrace();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        } catch (IntrospectionException e) {
-            e.printStackTrace();
-        }
-        return list;
-
-    }
-
-
     public T insert(T object)
     {
         Connection connection = null;
@@ -272,7 +204,7 @@ public abstract class GeneralDAO <T> {
         }
     }
 
-    public List<T> findAll() {
+    public List<T> findAll(Class<T> objectType) {
         Connection connection = null;
         PreparedStatement statement = null;
         ResultSet resultSet = null;
@@ -286,21 +218,30 @@ public abstract class GeneralDAO <T> {
             resultSet = statement.executeQuery();
 
             while (resultSet.next()) {
-                if(type.equals(Client.class))
-                {
-                    Client client = new Client();
-                    client.setId(resultSet.getInt("id"));
-                    client.setName(resultSet.getString("name"));
-                    client.setSurname(resultSet.getString("surname"));
-                    client.setPhoneNumber(resultSet.getString("phoneNumber"));
+                Constructor<T> constructor = objectType.getDeclaredConstructor();
+                constructor.setAccessible(true);
+                T object = constructor.newInstance();
 
-                    list.add((T) client);
+                for (Field field : objectType.getDeclaredFields()) {
+                    field.setAccessible(true);
+                    Object value = resultSet.getObject(field.getName());
+                    field.set(object, value);
                 }
+
+                list.add(object);
             }
 
 
         } catch (SQLException e) {
             LOGGER.log(Level.WARNING, type.getName() + "DAO:findAll " + e.getMessage());
+        } catch (InvocationTargetException e) {
+            throw new RuntimeException(e);
+        } catch (NoSuchMethodException e) {
+            throw new RuntimeException(e);
+        } catch (InstantiationException e) {
+            throw new RuntimeException(e);
+        } catch (IllegalAccessException e) {
+            throw new RuntimeException(e);
         } finally {
             ConnectionFactory.close(resultSet);
             ConnectionFactory.close(statement);
@@ -337,38 +278,47 @@ public abstract class GeneralDAO <T> {
     }
 
 
-    public Client findClientByIdForDeletion(int id) {
+    public <T> T findWhatYouNeedById(int id, Class<T> objectType) {
         Connection connection = null;
         PreparedStatement statement = null;
         ResultSet resultSet = null;
         String query = createSelectQuery("id");
 
-        Client client = null;
+        T object = null;
         try {
             connection = ConnectionFactory.getConnection();
             statement = connection.prepareStatement(query);
             statement.setInt(1, id);
             resultSet = statement.executeQuery();
-            client = new Client();
-            while (resultSet.next()) {
-                if (type.equals(Client.class)) {
 
-                    client.setId(resultSet.getInt("id"));
-                    client.setName(resultSet.getString("name"));
-                    client.setSurname(resultSet.getString("surname"));
-                    client.setPhoneNumber(resultSet.getString("phoneNumber"));
+            Constructor<T> constructor = objectType.getDeclaredConstructor();
+            constructor.setAccessible(true);
+            object = constructor.newInstance();
+
+            while (resultSet.next()) {
+                for (Field field : objectType.getDeclaredFields()) {
+                    field.setAccessible(true);
+                    Object value = resultSet.getObject(field.getName());
+                    field.set(object, value);
                 }
             }
 
-
         } catch (SQLException e) {
             LOGGER.log(Level.WARNING, type.getName() + "DAO:findById " + e.getMessage());
+        } catch (InvocationTargetException e) {
+            throw new RuntimeException(e);
+        } catch (NoSuchMethodException e) {
+            throw new RuntimeException(e);
+        } catch (InstantiationException e) {
+            throw new RuntimeException(e);
+        } catch (IllegalAccessException e) {
+            throw new RuntimeException(e);
         } finally {
             ConnectionFactory.close(resultSet);
             ConnectionFactory.close(statement);
             ConnectionFactory.close(connection);
         }
-        return client;
+        return object;
 
     }
 

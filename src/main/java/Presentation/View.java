@@ -397,7 +397,7 @@ public class View {
         JScrollPane tableScrollPane3 = new JScrollPane(productTable);
         tableScrollPane3.setBounds(50, 430, 800, 300);
         productFrame.add(tableScrollPane3);
-        String[] columnNames3 = {"ID", "Name", "Price", "Quantity"};
+        String[] columnNames3 = {"ID", "Name", "Quantity", "Price"};
         DefaultTableModel tableModel3 = new DefaultTableModel(columnNames3, 0);
         productTable.setModel(tableModel3);
 

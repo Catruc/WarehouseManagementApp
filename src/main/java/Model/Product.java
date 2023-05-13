@@ -6,7 +6,14 @@ public class Product {
     private int quantity;
     private double price;
 
-    public Product(int id, String name, double price, int quantity) {
+    public Product(int id, String name, int quantity, double price) {
+        this.id = id;
+        this.name = name;
+        this.price = price;
+        this.quantity=quantity;
+    }
+
+    public Product() {
         this.id = id;
         this.name = name;
         this.price = price;
