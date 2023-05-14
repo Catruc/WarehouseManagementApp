@@ -71,26 +71,6 @@ public class ConnectionFactory {
         }
     }
 
-    public static void main(String[] args) throws SQLException {
-
-        try {
-            Class.forName(DRIVER);
-            Connection connection = DriverManager.getConnection(DBURL, USER, PASS);
-            Statement stn= connection.createStatement();
-            ResultSet r= stn.executeQuery("SELECT * FROM Clients");
-            while(r.next())
-            {
-                String columnt1= r.getString("id");
-                String column2= r.getString("nume");
-                System.out.println(columnt1+" "+column2);
-
-            }
-
-        } catch (ClassNotFoundException e) {
-            throw new RuntimeException(e);
-        }
-
-    }
 
 
 }

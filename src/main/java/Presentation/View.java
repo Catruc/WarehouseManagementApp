@@ -64,25 +64,34 @@ public class View {
 
     private JButton orderInsertButton;
     private JButton deleteOrderButton;
-    private JButton updateOrderButton;
+    private JButton billOrderButton;
     private JTable orderTable;
     private JButton backToWelcomeButtonFromOrder;
+
+
+    private JFrame billFrame;
+    private JButton backToWelcomeButtonFromBill;
+    private JTable billTable;
+
 
     public View() {
         welcomeFrame = new JFrame("Welcome");
         clientFrame = new JFrame("Client");
         productFrame = new JFrame("Product");
         orderFrame = new JFrame("Order");
+        billFrame = new JFrame("Bill");
 
         welcomeFrame.setSize(1920, 1080);
         clientFrame.setSize(1920, 1080);
         productFrame.setSize(1920, 1080);
         orderFrame.setSize(1920, 1080);
+        billFrame.setSize(1920, 1080);
 
         welcomeFrame.setLayout(null);
         clientFrame.setLayout(null);
         productFrame.setLayout(null);
         orderFrame.setLayout(null);
+        billFrame.setLayout(null);
 
         welcomeFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         clientFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -291,15 +300,15 @@ public class View {
         deleteOrderButton.setToolTipText("Delete Button");
         orderFrame.add(deleteOrderButton);
 
-        updateOrderButton = new JButton("UPDATE");
-        updateOrderButton.setBounds(1000, 270, 400, 100);
-        updateOrderButton.setFont(new Font("Arial", Font.BOLD, 30));
-        updateOrderButton.setHorizontalAlignment(SwingConstants.CENTER);
-        updateOrderButton.setForeground(Color.BLUE);
-        updateOrderButton.setBorder(BorderFactory.createLineBorder(Color.BLACK, 2));
-        updateOrderButton.setOpaque(true);
-        updateOrderButton.setToolTipText("Update Button");
-        orderFrame.add(updateOrderButton);
+        billOrderButton = new JButton("Bill");
+        billOrderButton.setBounds(1000, 270, 400, 100);
+        billOrderButton.setFont(new Font("Arial", Font.BOLD, 30));
+        billOrderButton.setHorizontalAlignment(SwingConstants.CENTER);
+        billOrderButton.setForeground(Color.BLUE);
+        billOrderButton.setBorder(BorderFactory.createLineBorder(Color.BLACK, 2));
+        billOrderButton.setOpaque(true);
+        billOrderButton.setToolTipText("Bill Button");
+        orderFrame.add(billOrderButton);
 
         orderTable = new JTable();
         JScrollPane tableScrollPane2 = new JScrollPane(orderTable);
@@ -411,12 +420,33 @@ public class View {
         backToWelcomeButtonFromProduct.setToolTipText("Back Button");
         productFrame.add(backToWelcomeButtonFromProduct);
 
+        backToWelcomeButtonFromBill = new JButton("BACK");
+        backToWelcomeButtonFromBill.setBounds(1000, 600, 400, 100);
+        backToWelcomeButtonFromBill.setFont(new Font("Arial", Font.BOLD, 30));
+        backToWelcomeButtonFromBill.setHorizontalAlignment(SwingConstants.CENTER);
+        backToWelcomeButtonFromBill.setForeground(Color.BLUE);
+        backToWelcomeButtonFromBill.setBorder(BorderFactory.createLineBorder(Color.BLACK, 2));
+        backToWelcomeButtonFromBill.setOpaque(true);
+        backToWelcomeButtonFromBill.setToolTipText("Back Button");
+        billFrame.add(backToWelcomeButtonFromBill);
+
+        billTable = new JTable();
+        JScrollPane tableScrollPane4 = new JScrollPane(billTable);
+        tableScrollPane4.setBounds(50, 130, 800, 400);
+        billFrame.add(tableScrollPane4);
+        String[] columnNames4 = {"billId", "clientId", "productId", "quantity"};
+        DefaultTableModel tableModel4 = new DefaultTableModel(columnNames4, 0);
+        billTable.setModel(tableModel4);
+
+
 
 
         welcomeFrame.setVisible(true);
         clientFrame.setVisible(false);
         productFrame.setVisible(false);
         orderFrame.setVisible(false);
+        billFrame.setVisible(false);
+
 
     }
 
@@ -536,8 +566,8 @@ public class View {
         return deleteOrderButton;
     }
 
-    public JButton getUpdateOrderButton() {
-        return updateOrderButton;
+    public JButton getBillOrderButton() {
+        return billOrderButton;
     }
 
     public JTable getOrderTable() {
@@ -606,5 +636,17 @@ public class View {
 
     public JTextField getClientPhoneNumberTextField() {
         return clientPhoneNumberTextField;
+    }
+
+    public JFrame getBillFrame() {
+        return billFrame;
+    }
+
+    public JButton getBackToWelcomeButtonFromBill() {
+        return backToWelcomeButtonFromBill;
+    }
+
+    public JTable getBillTable() {
+        return billTable;
     }
 }

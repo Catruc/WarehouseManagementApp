@@ -36,8 +36,8 @@ public class Client {
         return phoneNumber;
     }
 
-    public void setId(int id) {
-        this.clientId = id;
+    public void setId(int clientId) {
+        this.clientId = clientId;
     }
 
     public void setName(String name) {

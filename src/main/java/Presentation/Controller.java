@@ -1,8 +1,8 @@
 package Presentation;
 
-import BusinessLogic.ClientBLL;
-import BusinessLogic.OrderBLL;
-import BusinessLogic.ProductBLL;
+import BusinessLogic.*;
+import DataAccess.BillDAO;
+import Model.Bill;
 import Model.Client;
 import Model.Orders;
 import Model.Product;
@@ -11,78 +11,69 @@ import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.lang.reflect.Array;
+import java.util.ArrayList;
 import java.util.List;
 
-public class Controller {
+public class Controller extends TableUpgrade{
     private View view;
     private ClientBLL clientBLL;
     private ProductBLL productBLL;
     private OrderBLL orderBLL;
+    private BillDAO billDAO;
 
-    public Controller(View view, ClientBLL clientBLL, ProductBLL productBLL, OrderBLL orderBLL) {
+
+
+    public Controller(View view, ClientBLL clientBLL, ProductBLL productBLL, OrderBLL orderBLL,BillDAO billDAO) {
         this.view = view;
         this.clientBLL = new ClientBLL();
         this.productBLL = new ProductBLL();
         this.orderBLL = new OrderBLL();
+        this.billDAO = new BillDAO();
         initListeners();
+
     }
 
 
-    public void updateClientTable() {
-        List<Client> clients = clientBLL.findAllClients(); // Fetch the data from the database
-        String[] columnNames = {"Id", "Name", "Surname", "PhoneNumber"}; // Specify column names
+    public void updateClientTable()
+    {
+        List<Client> clients = clientBLL.findAllClients();
+        String[] columnNames = {"ClientID", "Name", "Surname", "PhoneNumber"};
+        updateTable(clients, columnNames, view.getClientTable());
+    }
 
-        // Prepare the data for the table
-        Object[][] data = new Object[clients.size()][4];
-        for (int i = 0; i < clients.size(); i++) {
-            data[i][0] = clients.get(i).getClientID();
-            data[i][1] = clients.get(i).getName();
-            data[i][2] = clients.get(i).getSurname();
-            data[i][3] = clients.get(i).getPhoneNumber();
+    public void updateProductTable()
+    {
+        List<Product> products = productBLL.findAllProducts();
+        String[] columnNames = {"ProductId", "Name", "Stock", "Price"};
+        updateTable(products, columnNames, view.getProductTable());
+    }
+
+
+    public void updateOrderTable()
+    {
+        List<Orders> orders = orderBLL.findAllOrders();
+        String[] columnNames = {"Id", "ClientID", "ProductID", "Quantity"};
+        updateTable(orders, columnNames, view.getOrderTable());
+    }
+
+
+    public void displayBillData() {
+        List<Bill> bills = billDAO.findAllBills();
+        DefaultTableModel model = new DefaultTableModel();
+        model.addColumn("Client ID");
+        model.addColumn("Order ID");
+        model.addColumn("Quantity");
+
+        for (Bill bill : bills) {
+            Object[] row = {bill.clientId(), bill.orderId(), bill.quantity()};
+            model.addRow(row);
         }
 
-        // Create a new table model and set it for the table
-        DefaultTableModel model = new DefaultTableModel(data, columnNames);
-        view.getClientTable().setModel(model);
+        // Assuming you have a JTable named "billTable"
+        view.getBillTable().setModel(model);
     }
 
-
-    public void updateProductTable() {
-        List<Product> products = productBLL.findAllProducts(); // Fetch the data from the database
-        String[] columnNames = {"Id", "Name", "Quantity", "Price"}; // Specify column names
-
-        // Prepare the data for the table
-        Object[][] data = new Object[products.size()][4];
-        for (int i = 0; i < products.size(); i++) {
-            data[i][0] = products.get(i).getId();
-            data[i][1] = products.get(i).getName();
-            data[i][2] = products.get(i).getStock();
-            data[i][3] = products.get(i).getPrice();
-        }
-
-        // Create a new table model and set it for the table
-        DefaultTableModel model = new DefaultTableModel(data, columnNames);
-        view.getProductTable().setModel(model);
-    }
-
-
-    public void updateOrderTable() {
-        List<Orders> orders = orderBLL.findAllOrders(); // Fetch the data from the database
-        String[] columnNames = {"Id", "ClientID", "ProductID", "Quantity"}; // Specify column names
-
-        // Prepare the data for the table
-        Object[][] data = new Object[orders.size()][4];
-        for (int i = 0; i < orders.size(); i++) {
-            data[i][0] = orders.get(i).getId();
-            data[i][1] = orders.get(i).getClientID();
-            data[i][2] = orders.get(i).getProductID();
-            data[i][3] = orders.get(i).getQuantity();
-        }
-
-        // Create a new table model and set it for the table
-        DefaultTableModel model = new DefaultTableModel(data, columnNames);
-        view.getOrderTable().setModel(model);
-    }
 
 
     private void initListeners() {
@@ -103,6 +94,28 @@ public class Controller {
         view.getUpdateProductButton().addActionListener(new UpdateProductButtonListener());
         view.getOrderInsertButton().addActionListener(new OrderInsertButtonListener());
         view.getDeleteOrderButton().addActionListener(new DeleteOrderButtonListener());
+        view.getBillOrderButton().addActionListener(new BillOrderButtonListener());
+        view.getBackToWelcomeButtonFromBill().addActionListener(new BackToWelcomeButtonListenerFromBill());
+    }
+
+
+
+    class BillOrderButtonListener implements ActionListener {
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            view.getOrderFrame().setVisible(false);
+            view.getBillFrame().setVisible(true);
+            displayBillData();
+
+        }
+    }
+
+    class BackToWelcomeButtonListenerFromBill implements ActionListener {
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            view.getBillFrame().setVisible(false);
+            view.getOrderFrame().setVisible(true);
+        }
     }
 
     class ClientButtonListener implements ActionListener {
@@ -342,9 +355,12 @@ public class Controller {
                 int quantity = Integer.parseInt(view.getOrderQuantityTextField().getText());
 
                 Product product = productBLL.findDeletion(productID);
-
                 Orders orders = new Orders(id, clientID, productID, quantity);
                 orderBLL.insertOrder(orders);
+
+                Bill bill = null;
+                billDAO.insertBill(bill,orders);
+
 
                 product.setStock(product.getStock() - quantity);
                 productBLL.updateProduct(product);

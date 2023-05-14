@@ -8,6 +8,7 @@ import BusinessLogic.validatorsForProducts.ProductPriceValidator;
 import BusinessLogic.validatorsForProducts.ProductQuantityValidator;
 import DataAccess.ProductDAO;
 import Model.Client;
+import Model.Orders;
 import Model.Product;
 
 import javax.swing.*;
@@ -17,6 +18,7 @@ import java.util.List;
 public class ProductBLL {
     private List<Validator<Product>> validators;
     private ProductDAO productDAO;
+    OrderBLL orderBLL = new OrderBLL();
 
     public ProductBLL()
     {
@@ -31,11 +33,11 @@ public class ProductBLL {
 
     public void insertProduct(Product product)
     {
-        int pr = productDAO.findByIdForDeletion(product.getId());
+        int pr = productDAO.findByIdForDeletion(product.getProductId());
         if(pr != -1)
         {
-            JOptionPane.showMessageDialog(null, "The product with id =" + product.getId() + " already exists!", "Error", JOptionPane.ERROR_MESSAGE);
-            throw new IllegalArgumentException("The product with id =" + product.getId() + " already exists!");
+            JOptionPane.showMessageDialog(null, "The product with id =" + product.getProductId() + " already exists!", "Error", JOptionPane.ERROR_MESSAGE);
+            throw new IllegalArgumentException("The product with id =" + product.getProductId() + " already exists!");
         }
 
         for(Validator<Product> v : validators)
@@ -48,6 +50,12 @@ public class ProductBLL {
 
     public void deleteProduct(int id) {
 
+        List<Orders> productOrders = orderBLL.findAllOrders();
+        if (!productOrders.isEmpty() && productOrders.stream().anyMatch(o -> o.getProductID() == id)) {
+            JOptionPane.showMessageDialog(null, "Cannot delete the product. There are active orders associated with the product.", "Error", JOptionPane.ERROR_MESSAGE);
+            return; // Exit the method without deleting the client
+        }
+
         int pr = productDAO.findByIdForDeletion(id);
         if (pr == -1) {
             JOptionPane.showMessageDialog(null, "The product with id =" + id + " was not found!", "Error", JOptionPane.ERROR_MESSAGE);
@@ -59,7 +67,7 @@ public class ProductBLL {
 
     public void updateProduct(Product product) {
 
-        int pr = productDAO.findByIdForDeletion(product.getId());
+        int pr = productDAO.findByIdForDeletion(product.getProductId());
         if (pr == -1) {
             JOptionPane.showMessageDialog(null, "The product"  + " was not found!", "Error", JOptionPane.ERROR_MESSAGE);
             throw new IllegalArgumentException("The product " +  " was not found!");

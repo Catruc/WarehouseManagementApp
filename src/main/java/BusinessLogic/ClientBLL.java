@@ -4,15 +4,19 @@ import BusinessLogic.validatorsForClient.*;
 import DataAccess.ClientDAO;
 import DataAccess.GeneralDAO;
 import Model.Client;
+import Model.Orders;
+import Presentation.View;
+import com.mysql.cj.xdevapi.Table;
 
 import javax.swing.*;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ClientBLL {
+public class ClientBLL{
 
     private List<Validator<Client>> validators;
     private ClientDAO clientDAO;
+    private OrderBLL orderBLL = new OrderBLL();
 
     public ClientBLL() {
 
@@ -39,6 +43,12 @@ public class ClientBLL {
 
 
     public void deleteClient(int id) {
+
+        List<Orders> clientOrders = orderBLL.findAllOrders();
+        if (!clientOrders.isEmpty() && clientOrders.stream().anyMatch(o -> o.getClientID() == id)) {
+            JOptionPane.showMessageDialog(null, "Cannot delete the client. There are active orders associated with the client.", "Error", JOptionPane.ERROR_MESSAGE);
+            return; // Exit the method without deleting the client
+        }
 
         int cl = clientDAO.findByIdForDeletion(id);
         if (cl == -1) {
@@ -75,5 +85,8 @@ public class ClientBLL {
         Client cl = clientDAO.findWhatYouNeedById(id,Client.class);
         return cl;
     }
+
+
+
 
 }

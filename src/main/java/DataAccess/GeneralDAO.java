@@ -10,13 +10,12 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import Connection.ConnectionFactory;
+import Model.Bill;
 import Model.Client;
 
-public abstract class GeneralDAO <T> {
+public abstract class GeneralDAO<T> {
 
     protected final Logger LOGGER = Logger.getLogger(getClass().getName());
-
-
     private final Class<T> type;
     private final String idFieldName;  // The name of the id field
 
@@ -37,8 +36,7 @@ public abstract class GeneralDAO <T> {
 
     }
 
-    private String createSelectAllQuery()
-    {
+    private String createSelectAllQuery() {
         StringBuilder sb = new StringBuilder();
         sb.append("SELECT ");
         sb.append(" * ");
@@ -103,21 +101,18 @@ public abstract class GeneralDAO <T> {
         return sb.toString();
     }
 
-    public T insert(T object)
-    {
+    public T insert(T object) {
         Connection connection = null;
         PreparedStatement statement = null;
         ResultSet generatedKeys = null;
         String query = createInsertQuery();
 
-        try
-        {
+        try {
             connection = ConnectionFactory.getConnection();
             statement = connection.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
 
             int i = 1;
-            for (Field field : object.getClass().getDeclaredFields())
-            {
+            for (Field field : object.getClass().getDeclaredFields()) {
                 field.setAccessible(true);
                 Object value = field.get(object);
                 statement.setObject(i, value);
@@ -135,10 +130,11 @@ public abstract class GeneralDAO <T> {
                 Field field = object.getClass().getDeclaredField(idFieldName);
                 field.setAccessible(true);
                 field.set(object, idField);
+
             } else {
                 throw new SQLException("Creating object failed, no ID obtained.");
             }
-        }catch (SQLException | IllegalAccessException | NoSuchFieldException e) {
+        } catch (SQLException | IllegalAccessException | NoSuchFieldException e) {
             LOGGER.log(Level.WARNING, type.getName() + "DAO:insert " + e.getMessage());
         } finally {
             ConnectionFactory.close(generatedKeys);
@@ -278,7 +274,6 @@ public abstract class GeneralDAO <T> {
 
     }
 
-
     public <T> T findWhatYouNeedById(int id, Class<T> objectType) {
         Connection connection = null;
         PreparedStatement statement = null;
@@ -320,9 +315,7 @@ public abstract class GeneralDAO <T> {
             ConnectionFactory.close(connection);
         }
         return object;
-
     }
-
 
 
 }
