@@ -60,17 +60,19 @@ public class ClientBLL{
      */
     public void deleteClient(int id) {
 
+        int cl = clientDAO.findByIdForDeletion(id);
+        if (cl == -1) {
+            JOptionPane.showMessageDialog(null, "The client with id =" + id + " was not found!", "Error", JOptionPane.ERROR_MESSAGE);
+            throw new IllegalArgumentException("The client with id =" + id + " was not found!");
+        }
+
+
         List<Orders> clientOrders = orderBLL.findAllOrders();
         if (!clientOrders.isEmpty() && clientOrders.stream().anyMatch(o -> o.getClientID() == id)) {
             JOptionPane.showMessageDialog(null, "Cannot delete the client. There are active orders associated with the client.", "Error", JOptionPane.ERROR_MESSAGE);
             return; // Exit the method without deleting the client
         }
 
-        int cl = clientDAO.findByIdForDeletion(id);
-        if (cl == -1) {
-            JOptionPane.showMessageDialog(null, "The client with id =" + id + " was not found!", "Error", JOptionPane.ERROR_MESSAGE);
-            throw new IllegalArgumentException("The client with id =" + id + " was not found!");
-        }
         clientDAO.delete(id);
     }
 
@@ -98,9 +100,6 @@ public class ClientBLL{
      */
     public List<Client> findAllClients() {
         List<Client> clients = clientDAO.findAll(Client.class);
-        if (clients.isEmpty()) {
-            throw new IllegalArgumentException("There are no clients in the database!");
-        }
         return clients;
     }
 

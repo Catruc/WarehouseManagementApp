@@ -66,17 +66,19 @@ public class ProductBLL {
      */
     public void deleteProduct(int id) {
 
+        int pr = productDAO.findByIdForDeletion(id);
+        if (pr == -1) {
+            JOptionPane.showMessageDialog(null, "The product with id =" + id + " was not found!", "Error", JOptionPane.ERROR_MESSAGE);
+            throw new IllegalArgumentException("The product with id =" + id + " was not found!");
+        }
+
+
         List<Orders> productOrders = orderBLL.findAllOrders();
         if (!productOrders.isEmpty() && productOrders.stream().anyMatch(o -> o.getProductID() == id)) {
             JOptionPane.showMessageDialog(null, "Cannot delete the product. There are active orders associated with the product.", "Error", JOptionPane.ERROR_MESSAGE);
             return; // Exit the method without deleting the client
         }
 
-        int pr = productDAO.findByIdForDeletion(id);
-        if (pr == -1) {
-            JOptionPane.showMessageDialog(null, "The product with id =" + id + " was not found!", "Error", JOptionPane.ERROR_MESSAGE);
-            throw new IllegalArgumentException("The product with id =" + id + " was not found!");
-        }
         productDAO.delete(id);
     }
 
@@ -104,9 +106,6 @@ public class ProductBLL {
      */
     public List<Product> findAllProducts() {
         List<Product> products = productDAO.findAll(Product.class);
-        if (products.isEmpty()) {
-            throw new IllegalArgumentException("There are no products in the database!");
-        }
         return products;
     }
 

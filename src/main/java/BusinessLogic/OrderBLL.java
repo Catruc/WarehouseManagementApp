@@ -87,9 +87,6 @@ public class OrderBLL {
      */
     public List<Orders> findAllOrders() {
         List<Orders> orders = orderDAO.findAll(Orders.class);
-        if (orders.isEmpty()) {
-            throw new IllegalArgumentException("There are no orders in the database!");
-        }
         return orders;
     }
 
