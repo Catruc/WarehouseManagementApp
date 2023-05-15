@@ -6,6 +6,15 @@ import java.util.logging.Logger;
 
 public class ConnectionFactory {
 
+    /**
+     * ConnectionFactory attributes
+     * @param DRIVER
+     * @param DBURL
+     * @param USER
+     * @param PASS
+     * @param singleInstance
+     */
+
     private static final Logger LOGGER = Logger.getLogger(ConnectionFactory.class.getName());
     private static final String DRIVER = "com.mysql.cj.jdbc.Driver";
     private static final String DBURL = "jdbc:mysql://localhost:3306/Shop";
@@ -15,6 +24,10 @@ public class ConnectionFactory {
     private static ConnectionFactory singleInstance = new ConnectionFactory();
 
 
+    /**
+     * Constructor
+     */
+
     private ConnectionFactory() {
         try {
             Class.forName(DRIVER);
@@ -22,6 +35,11 @@ public class ConnectionFactory {
             e.printStackTrace();
         }
     }
+
+    /**
+     * Method that creates a connection to the database
+     * @return connection
+     */
 
     private Connection createConnection() {
         Connection connection = null;
@@ -35,10 +53,16 @@ public class ConnectionFactory {
     }
 
 
+
     public static Connection getConnection() {
         return singleInstance.createConnection();
     }
 
+
+    /**
+     * Methd that closes the connection to the database
+     * @param connection
+     */
 
     public static void close(Connection connection) {
         if (connection != null) {
@@ -50,6 +74,11 @@ public class ConnectionFactory {
         }
     }
 
+    /**
+     * Method that closes the statement
+     * @param statement
+     */
+
     public static void close(Statement statement) {
         if (statement != null) {
             try {
@@ -59,6 +88,11 @@ public class ConnectionFactory {
             }
         }
     }
+
+    /**
+     * Method that closes the result set
+     * @param resultSet
+     */
 
 
     public static void close(ResultSet resultSet) {

@@ -1,10 +1,26 @@
 package Model;
 
 public class Product {
+
+    /**
+     * Product attributes
+     * @param productId
+     * @param name
+     * @param stock
+     * @param price
+     */
     private int productId;
     private String name;
     private int stock;
     private double price;
+
+    /**
+     * Constructor
+     * @param productId
+     * @param name
+     * @param stock
+     * @param price
+     */
 
     public Product(int productId, String name, int stock, double price) {
         this.productId = productId;

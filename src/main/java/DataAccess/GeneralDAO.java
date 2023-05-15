@@ -15,15 +15,29 @@ import Model.Client;
 
 public abstract class GeneralDAO<T> {
 
+    /**
+     * GeneralDAO attributes
+     */
+
     protected final Logger LOGGER = Logger.getLogger(getClass().getName());
     private final Class<T> type;
     private final String idFieldName;  // The name of the id field
+
+    /**
+     * GeneralDAO constructor
+     * @param idFieldName
+     */
 
     @SuppressWarnings("unchecked")
     public GeneralDAO(String idFieldName) {
         this.type = (Class<T>) ((ParameterizedType) getClass().getGenericSuperclass()).getActualTypeArguments()[0];
         this.idFieldName = idFieldName;
     }
+
+    /**
+     * Method that create the Select query string
+     * @return
+     */
 
     private String createSelectQuery(String field) {
         StringBuilder sb = new StringBuilder();
@@ -36,6 +50,11 @@ public abstract class GeneralDAO<T> {
 
     }
 
+    /**
+     * Method that creates the Select all query string
+     * @return
+     */
+
     private String createSelectAllQuery() {
         StringBuilder sb = new StringBuilder();
         sb.append("SELECT ");
@@ -44,6 +63,11 @@ public abstract class GeneralDAO<T> {
         sb.append(type.getSimpleName());
         return sb.toString();
     }
+
+    /**
+     * Method that creates INSERT query string
+     * @return
+     */
 
     private String createInsertQuery() {
         StringBuilder sb = new StringBuilder();
@@ -69,6 +93,11 @@ public abstract class GeneralDAO<T> {
         return sb.toString();
     }
 
+    /**
+     * Method that creates UPDATE query string
+     * @return
+     */
+
 
     private String createUpdateQuery() {
         StringBuilder sb = new StringBuilder();
@@ -93,6 +122,11 @@ public abstract class GeneralDAO<T> {
     }
 
 
+    /**
+     * Method that creates DELETE query string
+     * @return
+     */
+
     private String createDeleteQuery() {
         StringBuilder sb = new StringBuilder();
         sb.append("DELETE FROM ");
@@ -100,6 +134,13 @@ public abstract class GeneralDAO<T> {
         sb.append(" WHERE " + idFieldName + "= ?");
         return sb.toString();
     }
+
+
+    /**
+     * Method that executes the Insert query
+     * @param object
+     * @return
+     */
 
     public T insert(T object) {
         Connection connection = null;
@@ -146,6 +187,12 @@ public abstract class GeneralDAO<T> {
     }
 
 
+    /**
+     * Method that executes the Update query
+     * @param object
+     * @return
+     */
+
     public T update(T object) {
         Connection connection = null;
         PreparedStatement statement = null;
@@ -182,6 +229,12 @@ public abstract class GeneralDAO<T> {
     }
 
 
+    /**
+     * Method that executes the Delete query
+     * @param id
+     */
+
+
     public void delete(int id) {
         Connection connection = null;
         PreparedStatement statement = null;
@@ -200,6 +253,13 @@ public abstract class GeneralDAO<T> {
             ConnectionFactory.close(connection);
         }
     }
+
+
+    /**
+     * Method that finds all elements from the database
+     * @param objectType
+     * @return list of elements
+     */
 
     public List<T> findAll(Class<T> objectType) {
         Connection connection = null;
@@ -248,6 +308,12 @@ public abstract class GeneralDAO<T> {
         return list;  // Return the list, even if it's empty
     }
 
+    /**
+     * Method that finds an element by ID
+     * @param id
+     * @return
+     */
+
     public int findByIdForDeletion(int id) {
         Connection connection = null;
         PreparedStatement statement = null;
@@ -273,6 +339,14 @@ public abstract class GeneralDAO<T> {
         return -1;
 
     }
+
+
+    /**
+     * Method that finds an element by ID
+     * @param id
+     * @param objectType
+     * @return object
+     */
 
     public <T> T findWhatYouNeedById(int id, Class<T> objectType) {
         Connection connection = null;

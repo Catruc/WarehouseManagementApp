@@ -20,10 +20,23 @@ import Model.Orders;
 
 public class BillDAO {
 
+    /**
+     * BillDAO attributes
+     * @param LOGGER
+     * @param INSERT_QUERY
+     * @param SELECT_ALL_QUERY
+     */
+
     protected final Logger LOGGER = Logger.getLogger(getClass().getName());
     private static final String INSERT_QUERY = "INSERT INTO Bill (clientId, orderId, quantity) VALUES (?, ?, ?)";
     private static final String SELECT_ALL_QUERY = "SELECT * FROM Bill";
 
+
+    /**
+     * Method that inserts a bill into the database
+     * @param bill
+     * @param order
+     */
     public void insertBill(Bill bill, Orders order) {
         Connection connection = null;
         PreparedStatement statement = null;
@@ -41,6 +54,11 @@ public class BillDAO {
             ConnectionFactory.close(connection);
         }
     }
+
+    /**
+     * Method that finds all the bills from the database
+     * @return bills
+     */
 
     public  List<Bill> findAllBills() {
         List<Bill> bills = new ArrayList<>();

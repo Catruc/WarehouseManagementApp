@@ -1,10 +1,26 @@
 package Model;
 
 public class Client {
+
+    /**
+     * Client attributes
+     * @param clientId
+     * @param name
+     * @param surname
+     * @param phoneNumber
+     */
     private int clientId;
     private String name;
     private String surname;
     private String phoneNumber;
+
+    /**
+     * Constructor
+     * @param clientId
+     * @param name
+     * @param surname
+     * @param phoneNumber
+     */
 
     public Client(int clientId, String name, String surname, String phoneNumber) {
         this.clientId = clientId;
@@ -12,6 +28,10 @@ public class Client {
         this.surname = surname;
         this.phoneNumber = phoneNumber;
     }
+
+    /**
+     * Constructor
+     */
 
     public Client() {
         this.clientId = clientId;
@@ -52,6 +72,12 @@ public class Client {
     public void setPhoneNumber(String phoneNumber) {
         this.phoneNumber = phoneNumber;
     }
+
+
+    /**
+     * toString method
+     * @return
+     */
 
     @Override
     public String toString() {

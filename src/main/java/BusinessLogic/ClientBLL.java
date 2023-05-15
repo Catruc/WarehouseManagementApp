@@ -14,9 +14,20 @@ import java.util.List;
 
 public class ClientBLL{
 
+    /**
+     * The list of validators for the client     *  DAO
+     * The order BLL
+     */
+
     private List<Validator<Client>> validators;
     private ClientDAO clientDAO;
     private OrderBLL orderBLL = new OrderBLL();
+
+
+    /**
+     * The constructor of the class
+     * It instantiates the validators list and the client DAO
+     */
 
     public ClientBLL() {
 
@@ -27,6 +38,11 @@ public class ClientBLL{
         validators.add(new ClientPhoneNumberValidator());
         clientDAO = new ClientDAO();
     }
+
+    /**
+     * The method that inserts a client into the database
+     * @param client The client to be inserted
+     */
 
     public void insertClient(Client client) {
         int cl = clientDAO.findByIdForDeletion(client.getClientID());
@@ -40,6 +56,11 @@ public class ClientBLL{
         }
         clientDAO.insert(client);
     }
+
+    /**
+     * The method that deletes a client from the database
+     * @param id The id of the client to be deleted
+     */
 
 
     public void deleteClient(int id) {
@@ -58,6 +79,11 @@ public class ClientBLL{
         clientDAO.delete(id);
     }
 
+    /**
+     * The method that updates a client from the database
+     * @param client The client to be updated
+     */
+
     public void updateClient(Client client) {
 
         int cl = clientDAO.findByIdForDeletion(client.getClientID());
@@ -72,6 +98,11 @@ public class ClientBLL{
         clientDAO.update(client);
     }
 
+    /**
+     * The method that finds a client by id
+     * @return The client with the given id
+     */
+
     public List<Client> findAllClients() {
         List<Client> clients = clientDAO.findAll(Client.class);
         if (clients.isEmpty()) {
@@ -79,6 +110,12 @@ public class ClientBLL{
         }
         return clients;
     }
+
+    /**
+     * The method that finds a client by id
+     * @param id The id of the client to be found
+     * @return The client with the given id
+     */
 
     public Client findDeletion(int id)
     {

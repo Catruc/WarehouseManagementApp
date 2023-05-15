@@ -2,11 +2,27 @@ package Model;
 
 public class Orders {
 
+    /**
+     * Orders attributes
+     * @param id
+     * @param clientID
+     * @param productID
+     * @param quantity
+     */
+
     private int id;
     private int clientID;
     private int productID;
     private int quantity;
 
+
+    /**
+     * Constructor
+     * @param id
+     * @param clientID
+     * @param productID
+     * @param quantity
+     */
     public Orders(int id, int clientID, int productID, int quantity) {
         this.id = id;
         this.clientID = clientID;

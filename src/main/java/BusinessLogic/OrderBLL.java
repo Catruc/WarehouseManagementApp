@@ -10,8 +10,17 @@ import java.util.List;
 
 public class OrderBLL {
 
+    /**
+     * The list of validators for the order     *  DAO
+     */
+
     private List<Validator<Orders>> validators;
     private OrderDAO orderDAO;
+
+    /**
+     * The constructor of the class
+     * It instantiates the validators list and the order DAO
+     */
 
     public OrderBLL() {
         validators = new ArrayList<Validator<Orders>>();
@@ -21,6 +30,12 @@ public class OrderBLL {
         validators.add(new ProductStockValidator());
         orderDAO = new OrderDAO();
     }
+
+
+    /**
+     * The method that inserts an order into the database
+     * @param orders The order to be inserted
+     */
 
 
     public void insertOrder(Orders orders) {
@@ -37,6 +52,12 @@ public class OrderBLL {
     }
 
 
+    /**
+     * The method that deletes an order from the database
+     * @param id The id of the order to be deleted
+     */
+
+
     public void deleteOrder(int id) {
 
         int cl = orderDAO.findByIdForDeletion(id);
@@ -46,6 +67,12 @@ public class OrderBLL {
         }
         orderDAO.delete(id);
     }
+
+
+    /**
+     * The method that updates an order from the database
+     * @param orders The order to be updated
+     */
 
     public void updateOrder(Orders orders) {
 
@@ -61,6 +88,11 @@ public class OrderBLL {
         orderDAO.update(orders);
     }
 
+    /**
+     * The method that finds all the orders from the database
+     * @return The list of orders
+     */
+
     public List<Orders> findAllOrders() {
         List<Orders> orders = orderDAO.findAll(Orders.class);
         if (orders.isEmpty()) {
@@ -68,6 +100,12 @@ public class OrderBLL {
         }
         return orders;
     }
+
+    /**
+     * The method that finds an order by id from the database
+     * @param id The id of the order to be found
+     * @return The order found
+     */
 
     public Orders findDeletion(int id)
     {

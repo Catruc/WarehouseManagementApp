@@ -16,9 +16,19 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ProductBLL {
+
+    /**
+     * The list of validators for the product     *  DAO
+     */
     private List<Validator<Product>> validators;
     private ProductDAO productDAO;
     OrderBLL orderBLL = new OrderBLL();
+
+
+    /**
+     * The constructor of the class
+     * It instantiates the validators list and the product DAO
+     */
 
     public ProductBLL()
     {
@@ -31,6 +41,10 @@ public class ProductBLL {
     }
 
 
+    /**
+     * The method that inserts a product into the database
+     * @param product The product to be inserted
+     */
     public void insertProduct(Product product)
     {
         int pr = productDAO.findByIdForDeletion(product.getProductId());
@@ -46,6 +60,11 @@ public class ProductBLL {
         }
         productDAO.insert(product);
     }
+
+    /**
+     * The method that deletes a product from the database
+     * @param id The id of the product to be deleted
+     */
 
 
     public void deleteProduct(int id) {
@@ -64,6 +83,11 @@ public class ProductBLL {
         productDAO.delete(id);
     }
 
+    /**
+     * The method that updates a product from the database
+     * @param product The product to be updated
+     */
+
 
     public void updateProduct(Product product) {
 
@@ -79,6 +103,11 @@ public class ProductBLL {
         productDAO.update(product);
     }
 
+    /**
+     * The method that finds a product by id
+     * @return The product with the given id
+     */
+
 
     public List<Product> findAllProducts() {
         List<Product> products = productDAO.findAll(Product.class);
@@ -87,6 +116,13 @@ public class ProductBLL {
         }
         return products;
     }
+
+
+    /**
+     * The method that finds a product by id
+     * @param id The id of the product to be found
+     * @return The product with the given id
+     */
 
 
     public Product findDeletion(int id)
