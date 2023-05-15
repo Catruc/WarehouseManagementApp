@@ -21,7 +21,6 @@ public class Client {
      * @param surname
      * @param phoneNumber
      */
-
     public Client(int clientId, String name, String surname, String phoneNumber) {
         this.clientId = clientId;
         this.name = name;
@@ -32,7 +31,6 @@ public class Client {
     /**
      * Constructor
      */
-
     public Client() {
         this.clientId = clientId;
         this.name = name;
@@ -78,7 +76,6 @@ public class Client {
      * toString method
      * @return
      */
-
     @Override
     public String toString() {
         return "Client{" +

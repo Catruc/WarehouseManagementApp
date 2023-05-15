@@ -18,7 +18,6 @@ public abstract class GeneralDAO<T> {
     /**
      * GeneralDAO attributes
      */
-
     protected final Logger LOGGER = Logger.getLogger(getClass().getName());
     private final Class<T> type;
     private final String idFieldName;  // The name of the id field
@@ -27,7 +26,6 @@ public abstract class GeneralDAO<T> {
      * GeneralDAO constructor
      * @param idFieldName
      */
-
     @SuppressWarnings("unchecked")
     public GeneralDAO(String idFieldName) {
         this.type = (Class<T>) ((ParameterizedType) getClass().getGenericSuperclass()).getActualTypeArguments()[0];
@@ -38,7 +36,6 @@ public abstract class GeneralDAO<T> {
      * Method that create the Select query string
      * @return
      */
-
     private String createSelectQuery(String field) {
         StringBuilder sb = new StringBuilder();
         sb.append("SELECT ");
@@ -54,7 +51,6 @@ public abstract class GeneralDAO<T> {
      * Method that creates the Select all query string
      * @return
      */
-
     private String createSelectAllQuery() {
         StringBuilder sb = new StringBuilder();
         sb.append("SELECT ");
@@ -68,7 +64,6 @@ public abstract class GeneralDAO<T> {
      * Method that creates INSERT query string
      * @return
      */
-
     private String createInsertQuery() {
         StringBuilder sb = new StringBuilder();
         sb.append("INSERT INTO ");
@@ -97,8 +92,6 @@ public abstract class GeneralDAO<T> {
      * Method that creates UPDATE query string
      * @return
      */
-
-
     private String createUpdateQuery() {
         StringBuilder sb = new StringBuilder();
         sb.append("UPDATE ");
@@ -126,7 +119,6 @@ public abstract class GeneralDAO<T> {
      * Method that creates DELETE query string
      * @return
      */
-
     private String createDeleteQuery() {
         StringBuilder sb = new StringBuilder();
         sb.append("DELETE FROM ");
@@ -141,7 +133,6 @@ public abstract class GeneralDAO<T> {
      * @param object
      * @return
      */
-
     public T insert(T object) {
         Connection connection = null;
         PreparedStatement statement = null;
@@ -192,7 +183,6 @@ public abstract class GeneralDAO<T> {
      * @param object
      * @return
      */
-
     public T update(T object) {
         Connection connection = null;
         PreparedStatement statement = null;
@@ -233,8 +223,6 @@ public abstract class GeneralDAO<T> {
      * Method that executes the Delete query
      * @param id
      */
-
-
     public void delete(int id) {
         Connection connection = null;
         PreparedStatement statement = null;
@@ -260,7 +248,6 @@ public abstract class GeneralDAO<T> {
      * @param objectType
      * @return list of elements
      */
-
     public List<T> findAll(Class<T> objectType) {
         Connection connection = null;
         PreparedStatement statement = null;
@@ -313,7 +300,6 @@ public abstract class GeneralDAO<T> {
      * @param id
      * @return
      */
-
     public int findByIdForDeletion(int id) {
         Connection connection = null;
         PreparedStatement statement = null;
@@ -347,7 +333,6 @@ public abstract class GeneralDAO<T> {
      * @param objectType
      * @return object
      */
-
     public <T> T findWhatYouNeedById(int id, Class<T> objectType) {
         Connection connection = null;
         PreparedStatement statement = null;

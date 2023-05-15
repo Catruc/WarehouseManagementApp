@@ -12,7 +12,6 @@ public class ClientDAO extends GeneralDAO<Client> {
     /**
      * ClientDAO attributes
      */
-
     public ClientDAO() {
         super("clientId");
     }

@@ -16,7 +16,6 @@ public abstract class TableUpgrade {
      * @param table The table to be updated
      * @param <T> The type of the items
      */
-
     public <T> void updateTable(List<T> items, String[] columnNames, JTable table) {
         Object[][] data = new Object[items.size()][columnNames.length];
         for (int i = 0; i < items.size(); i++) {

@@ -18,7 +18,6 @@ public class ClientBLL{
      * The list of validators for the client     *  DAO
      * The order BLL
      */
-
     private List<Validator<Client>> validators;
     private ClientDAO clientDAO;
     private OrderBLL orderBLL = new OrderBLL();
@@ -28,7 +27,6 @@ public class ClientBLL{
      * The constructor of the class
      * It instantiates the validators list and the client DAO
      */
-
     public ClientBLL() {
 
         validators = new ArrayList<Validator<Client>>();
@@ -43,7 +41,6 @@ public class ClientBLL{
      * The method that inserts a client into the database
      * @param client The client to be inserted
      */
-
     public void insertClient(Client client) {
         int cl = clientDAO.findByIdForDeletion(client.getClientID());
         if (cl != -1) {
@@ -61,8 +58,6 @@ public class ClientBLL{
      * The method that deletes a client from the database
      * @param id The id of the client to be deleted
      */
-
-
     public void deleteClient(int id) {
 
         List<Orders> clientOrders = orderBLL.findAllOrders();
@@ -83,7 +78,6 @@ public class ClientBLL{
      * The method that updates a client from the database
      * @param client The client to be updated
      */
-
     public void updateClient(Client client) {
 
         int cl = clientDAO.findByIdForDeletion(client.getClientID());
@@ -102,7 +96,6 @@ public class ClientBLL{
      * The method that finds a client by id
      * @return The client with the given id
      */
-
     public List<Client> findAllClients() {
         List<Client> clients = clientDAO.findAll(Client.class);
         if (clients.isEmpty()) {
@@ -116,7 +109,6 @@ public class ClientBLL{
      * @param id The id of the client to be found
      * @return The client with the given id
      */
-
     public Client findDeletion(int id)
     {
         Client cl = clientDAO.findWhatYouNeedById(id,Client.class);

@@ -9,7 +9,6 @@ public class Orders {
      * @param productID
      * @param quantity
      */
-
     private int id;
     private int clientID;
     private int productID;

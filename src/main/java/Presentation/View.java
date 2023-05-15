@@ -6,6 +6,9 @@ import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 
+/**
+ * The view class
+ */
 public class View {
 
     private JFrame welcomeFrame;

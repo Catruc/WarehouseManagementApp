@@ -21,7 +21,6 @@ public class Product {
      * @param stock
      * @param price
      */
-
     public Product(int productId, String name, int stock, double price) {
         this.productId = productId;
         this.name = name;

@@ -15,6 +15,10 @@ import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.List;
 
+
+/**
+ * The controller of the MVC pattern
+ */
 public class Controller extends TableUpgrade{
     private View view;
     private ClientBLL clientBLL;

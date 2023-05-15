@@ -22,11 +22,7 @@ public class BillDAO {
 
     /**
      * BillDAO attributes
-     * @param LOGGER
-     * @param INSERT_QUERY
-     * @param SELECT_ALL_QUERY
      */
-
     protected final Logger LOGGER = Logger.getLogger(getClass().getName());
     private static final String INSERT_QUERY = "INSERT INTO Bill (clientId, orderId, quantity) VALUES (?, ?, ?)";
     private static final String SELECT_ALL_QUERY = "SELECT * FROM Bill";
@@ -59,7 +55,6 @@ public class BillDAO {
      * Method that finds all the bills from the database
      * @return bills
      */
-
     public  List<Bill> findAllBills() {
         List<Bill> bills = new ArrayList<>();
         Connection connection = null;
