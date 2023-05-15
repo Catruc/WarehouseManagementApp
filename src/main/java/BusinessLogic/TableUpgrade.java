@@ -38,6 +38,4 @@ public abstract class TableUpgrade {
         table.setModel(model);
     }
 
-
-
 }
