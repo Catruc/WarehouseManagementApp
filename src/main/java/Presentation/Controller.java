@@ -42,25 +42,30 @@ public class Controller extends TableUpgrade{
     public void updateClientTable()
     {
         List<Client> clients = clientBLL.findAllClients();
-        String[] columnNames = getTableHeaders(view.getClientTable());
-        updateTable(clients, columnNames, view.getClientTable());
-        view.getClientTable().revalidate();
-        view.getClientTable().repaint();
+        String[] columnNames = getHeader(clients);
+        Object[][] content = getContent(clients);
+        DefaultTableModel model = new DefaultTableModel(content, columnNames);
+        view.getClientTable().setModel(model);
+
     }
 
     public void updateProductTable()
     {
         List<Product> products = productBLL.findAllProducts();
-        String[] columnNames = getTableHeaders(view.getProductTable());
-        updateTable(products, columnNames, view.getProductTable());
+        String[] columnNames = getHeader(products);
+        Object[][] content = getContent(products);
+        DefaultTableModel model = new DefaultTableModel(content,columnNames);
+        view.getProductTable().setModel(model);
     }
 
 
     public void updateOrderTable()
     {
         List<Orders> orders = orderBLL.findAllOrders();
-        String[] columnNames = getTableHeaders(view.getOrderTable());
-        updateTable(orders, columnNames, view.getOrderTable());
+        String[] columnNames = getHeader(orders);
+        Object[][] content = getContent(orders);
+        DefaultTableModel model = new DefaultTableModel(content,columnNames);
+        view.getOrderTable().setModel(model);
     }
 
 
