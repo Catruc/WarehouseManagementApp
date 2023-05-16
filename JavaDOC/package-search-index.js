@@ -1,1 +1,0 @@
-packageSearchIndex = [{"l":"All Packages","u":"allpackages-index.html"},{"l":"BusinessLogic"},{"l":"BusinessLogic.validatorsForClient"},{"l":"BusinessLogic.validatorsForOrders"},{"l":"BusinessLogic.validatorsForProducts"},{"l":"Connection"},{"l":"DataAccess"},{"l":"Model"},{"l":"org.example"},{"l":"Presentation"}];updateSearchResults();
