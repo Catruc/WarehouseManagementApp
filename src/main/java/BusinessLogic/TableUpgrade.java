@@ -2,6 +2,7 @@ package BusinessLogic;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableModel;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.List;
@@ -36,6 +37,18 @@ public abstract class TableUpgrade {
 
         DefaultTableModel model = new DefaultTableModel(data, columnNames);
         table.setModel(model);
+    }
+
+    public String[] getTableHeaders(JTable table) {
+        TableModel model = table.getModel();
+        int columnCount = model.getColumnCount();
+        String[] headers = new String[columnCount];
+
+        for (int i = 0; i < columnCount; i++) {
+            headers[i] = model.getColumnName(i);
+        }
+
+        return headers;
     }
 
 }

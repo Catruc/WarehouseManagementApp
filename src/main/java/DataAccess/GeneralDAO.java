@@ -144,24 +144,24 @@ public abstract class GeneralDAO<T> {
             statement = connection.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
 
             int i = 1;
-            for (Field field : object.getClass().getDeclaredFields()) {
-                field.setAccessible(true);
-                Object value = field.get(object);
-                statement.setObject(i, value);
-                i++;
+            for (Field field : object.getClass().getDeclaredFields()) {  // For each field of the object
+                field.setAccessible(true);  // Set the field accessible
+                Object value = field.get(object);  // Get the value of the field
+                statement.setObject(i, value);      // Set the value of the field
+                i++;                        // Increment the index
             }
-            int affectedRows = statement.executeUpdate();
+            int affectedRows = statement.executeUpdate();       // Execute the query
 
-            if (affectedRows == 0) {
-                throw new SQLException("Creating object failed, no rows affected.");
+            if (affectedRows == 0) {        // If no rows were affected
+                throw new SQLException("Creating object failed, no rows affected.");    // Throw exception
             }
 
-            generatedKeys = statement.getGeneratedKeys();
-            if (generatedKeys.next()) {
-                int idField = generatedKeys.getInt(1);
-                Field field = object.getClass().getDeclaredField(idFieldName);
-                field.setAccessible(true);
-                field.set(object, idField);
+            generatedKeys = statement.getGeneratedKeys();       // Get the generated keys
+            if (generatedKeys.next()) {    // If there are generated keys
+                int idField = generatedKeys.getInt(1);      // Get the first generated key
+                Field field = object.getClass().getDeclaredField(idFieldName);  // Get the id field
+                field.setAccessible(true);    // Set the field accessible
+                field.set(object, idField);  // Set the id field
 
             } else {
                 throw new SQLException("Creating object failed, no ID obtained.");
@@ -194,18 +194,18 @@ public abstract class GeneralDAO<T> {
             statement = connection.prepareStatement(query);
 
             int i = 1;
-            for (Field field : object.getClass().getDeclaredFields()) {
-                if (!field.getName().equals(idFieldName)) {
-                    field.setAccessible(true);
-                    Object value = field.get(object);
-                    statement.setObject(i, value);
+            for (Field field : object.getClass().getDeclaredFields()) {  // For each field of the object
+                if (!field.getName().equals(idFieldName)) {     // If the field is not the id field
+                    field.setAccessible(true);      // Set the field accessible
+                    Object value = field.get(object);       // Get the value of the field
+                    statement.setObject(i, value);      // Set the value of the field
                     i++;
                 }
             }
 
-            Field idField = object.getClass().getDeclaredField(idFieldName);
-            idField.setAccessible(true);
-            statement.setObject(i, idField.get(object));
+            Field idField = object.getClass().getDeclaredField(idFieldName);  // Get the id field
+            idField.setAccessible(true);        // Set the field accessible
+            statement.setObject(i, idField.get(object));        // Set the value of the id field
 
             statement.executeUpdate();
         } catch (SQLException | IllegalAccessException | NoSuchFieldException e) {
@@ -231,9 +231,9 @@ public abstract class GeneralDAO<T> {
         try {
             connection = ConnectionFactory.getConnection();
             statement = connection.prepareStatement(query);
-            statement.setInt(1, id);
+            statement.setInt(1, id);        // Set the id of the object to be deleted
 
-            statement.executeUpdate();
+            statement.executeUpdate();      // Execute the query
         } catch (SQLException e) {
             LOGGER.log(Level.WARNING, type.getName() + "DAO:delete " + e.getMessage());
         } finally {
@@ -261,15 +261,15 @@ public abstract class GeneralDAO<T> {
             statement = connection.prepareStatement(query);
             resultSet = statement.executeQuery();
 
-            while (resultSet.next()) {
-                Constructor<T> constructor = objectType.getDeclaredConstructor();
-                constructor.setAccessible(true);
-                T object = constructor.newInstance();
+            while (resultSet.next()) {      // While there are elements in the result set
+                Constructor<T> constructor = objectType.getDeclaredConstructor();       // Get the constructor
+                constructor.setAccessible(true);        // Set the constructor accessible
+                T object = constructor.newInstance();       // Create a new instance of the object
 
-                for (Field field : objectType.getDeclaredFields()) {
-                    field.setAccessible(true);
-                    Object value = resultSet.getObject(field.getName());
-                    field.set(object, value);
+                for (Field field : objectType.getDeclaredFields()) {        // For each field of the object
+                    field.setAccessible(true);      // Set the field accessible
+                    Object value = resultSet.getObject(field.getName());        // Get the value of the field
+                    field.set(object, value);       // Set the value of the field
                 }
 
                 list.add(object);
@@ -346,9 +346,9 @@ public abstract class GeneralDAO<T> {
             statement.setInt(1, id);
             resultSet = statement.executeQuery();
 
-            Constructor<T> constructor = objectType.getDeclaredConstructor();
-            constructor.setAccessible(true);
-            object = constructor.newInstance();
+            Constructor<T> constructor = objectType.getDeclaredConstructor();       // Get the constructor
+            constructor.setAccessible(true);        // Set the constructor accessible
+            object = constructor.newInstance();     // Create a new instance of the object
 
             while (resultSet.next()) {
                 for (Field field : objectType.getDeclaredFields()) {

@@ -224,7 +224,7 @@ public class View {
         JScrollPane tableScrollPane = new JScrollPane(clientTable);
         tableScrollPane.setBounds(50, 460, 800, 300);
         clientFrame.add(tableScrollPane);
-        String[] columnNames = {"ID", "Name", "Surname"};
+        String[] columnNames = {"ClientID", "Name", "Surname"};
         DefaultTableModel tableModel = new DefaultTableModel(columnNames, 0);
         clientTable.setModel(tableModel);
 
@@ -317,7 +317,7 @@ public class View {
         JScrollPane tableScrollPane2 = new JScrollPane(orderTable);
         tableScrollPane2.setBounds(50, 430, 800, 300);
         orderFrame.add(tableScrollPane2);
-        String[] columnNames2 = {"ID", "Client ID", "Product ID", "Quantity"};
+        String[] columnNames2 = {"Id", "ClientID", "ProductID", "Quantity"};
         DefaultTableModel tableModel2 = new DefaultTableModel(columnNames2, 0);
         orderTable.setModel(tableModel2);
 
@@ -409,7 +409,7 @@ public class View {
         JScrollPane tableScrollPane3 = new JScrollPane(productTable);
         tableScrollPane3.setBounds(50, 430, 800, 300);
         productFrame.add(tableScrollPane3);
-        String[] columnNames3 = {"ID", "Name", "Quantity", "Price"};
+        String[] columnNames3 = {"ProductId", "Name", "Stock", "Price"};
         DefaultTableModel tableModel3 = new DefaultTableModel(columnNames3, 0);
         productTable.setModel(tableModel3);
 

@@ -42,14 +42,16 @@ public class Controller extends TableUpgrade{
     public void updateClientTable()
     {
         List<Client> clients = clientBLL.findAllClients();
-        String[] columnNames = {"ClientID", "Name", "Surname", "PhoneNumber"};
+        String[] columnNames = getTableHeaders(view.getClientTable());
         updateTable(clients, columnNames, view.getClientTable());
+        view.getClientTable().revalidate();
+        view.getClientTable().repaint();
     }
 
     public void updateProductTable()
     {
         List<Product> products = productBLL.findAllProducts();
-        String[] columnNames = {"ProductId", "Name", "Stock", "Price"};
+        String[] columnNames = getTableHeaders(view.getProductTable());
         updateTable(products, columnNames, view.getProductTable());
     }
 
@@ -57,7 +59,7 @@ public class Controller extends TableUpgrade{
     public void updateOrderTable()
     {
         List<Orders> orders = orderBLL.findAllOrders();
-        String[] columnNames = {"Id", "ClientID", "ProductID", "Quantity"};
+        String[] columnNames = getTableHeaders(view.getOrderTable());
         updateTable(orders, columnNames, view.getOrderTable());
     }
 
